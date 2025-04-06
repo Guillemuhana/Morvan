@@ -17,19 +17,110 @@ import {
   ChevronDown,
   Menu,
   User,
+  FileSearch,
+  Brain,
+  FolderArchive,
+  Users,
+  Briefcase,
+  Send,
+  BarChart,
+  MessageCircle,
+  Calculator,
+  GitBranch,
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { motion } from "framer-motion"
-import { useRef } from "react"
 
 export default function LandingPage() {
   const howItWorksRef = useRef(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [activeSegment, setActiveSegment] = useState<number | null>(null)
+
+  // Datos para el diagrama de soluciones
+  const solutions = [
+    {
+      id: 1,
+      title: "Discovery Sales Tool",
+      description: "Herramienta de ventas para descubrir oportunidades de negocio",
+      color: "#E5243B", // Rojo
+      icon: <FileSearch className="h-5 w-5" />,
+    },
+    {
+      id: 2,
+      title: "AI para Documentos",
+      description: "Procesamiento inteligente de documentos mediante IA",
+      color: "#DDA63A", // Amarillo
+      icon: <Brain className="h-5 w-5" />,
+    },
+    {
+      id: 3,
+      title: "Centraliza Documentación",
+      description: "Sistema centralizado para toda la documentación",
+      color: "#4C9F38", // Verde
+      icon: <FolderArchive className="h-5 w-5" />,
+    },
+    {
+      id: 4,
+      title: "Gestión de Clientes y Proveedores",
+      description: "Administración y librería de customers y suppliers",
+      color: "#C5192D", // Rojo oscuro
+      icon: <Users className="h-5 w-5" />,
+    },
+    {
+      id: 5,
+      title: "Proyectos Spot y Contractuales",
+      description: "Creación y gestión de proyectos Spot y Contractuales",
+      color: "#FF3A21", // Naranja
+      icon: <Briefcase className="h-5 w-5" />,
+    },
+    {
+      id: 6,
+      title: "One-click RFQs",
+      description: "Envío y recepción de RFQs a suppliers con un solo clic",
+      color: "#26BDE2", // Azul claro
+      icon: <Send className="h-5 w-5" />,
+    },
+    {
+      id: 7,
+      title: "AI Comparador de Presupuestos",
+      description: "IA que compara los presupuestos de suppliers",
+      color: "#FCC30B", // Amarillo dorado
+      icon: <BarChart className="h-5 w-5" />,
+    },
+    {
+      id: 8,
+      title: "KPIs y Reporting",
+      description: "KPIs y reporting de proyectos según vendedores y pricers",
+      color: "#A21942", // Púrpura
+      icon: <FileBarChart className="h-5 w-5" />,
+    },
+    {
+      id: 9,
+      title: "Chat Interno",
+      description: "Comunicación interna vía chat con customers",
+      color: "#FD6925", // Naranja
+      icon: <MessageCircle className="h-5 w-5" />,
+    },
+    {
+      id: 10,
+      title: "Cotizador Estandarizado",
+      description: "Cotizador sencillo y estandarizado con accesoriales y T&C",
+      color: "#DD1367", // Rosa
+      icon: <Calculator className="h-5 w-5" />,
+    },
+    {
+      id: 11,
+      title: "Sistema de Versionado",
+      description: "Control de versiones en las cotizaciones para customers",
+      color: "#19486A", // Azul marino
+      icon: <GitBranch className="h-5 w-5" />,
+    },
+  ]
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -292,8 +383,7 @@ export default function LandingPage() {
             >
               <div className="text-orange-400 font-bold text-sm sm:text-base mb-1 sm:mb-2">Transportistas</div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-              Orientado a empresas logisticas (Freight Brokerage, 3PL, Trucking companies)
-
+                Orientado a empresas logisticas (Freight Brokerage, 3PL, Trucking companies)
               </h1>
               <p className="text-base sm:text-lg text-blue-100">
                 Optimiza tus operaciones logísticas con nuestra plataforma digital integral.
@@ -325,8 +415,153 @@ export default function LandingPage() {
           </div>
         </motion.section>
 
+        {/* NUEVA SECCIÓN: Diagrama de Soluciones estilo ODS */}
+        <section className="py-16 md:py-24 bg-white">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-blue-900 mb-4">Nuestras Soluciones</h2>
+              <p className="text-gray-600 max-w-3xl mx-auto">
+                Ofrecemos un conjunto completo de herramientas diseñadas para optimizar cada aspecto de tu operación
+                logística
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center justify-center">
+              {/* Diagrama de soluciones estilo ODS */}
+              <div className="relative w-full max-w-[650px] aspect-square mx-auto">
+                {/* Círculo central */}
+                <div className="absolute inset-[32%] rounded-full bg-white border-4 border-blue-600 flex items-center justify-center z-30 shadow-lg">
+                  <div className="text-center">
+                    <img src="/images/newlogo.png" alt="Logo" className="w-3/4 h-auto mx-auto" />
+                    <div className="text-blue-900 font-bold text-sm mt-1">SOLUCIONES</div>
+                  </div>
+                </div>
+
+                {/* Segmentos del círculo estilo ODS */}
+                {solutions.map((solution, index) => {
+                  const totalSegments = solutions.length
+                  const angleStep = (2 * Math.PI) / totalSegments
+                  const angle = index * angleStep - Math.PI / 2 // Comenzar desde arriba
+
+                  // Calcular puntos para el segmento triangular
+                  const innerRadius = 25 // % del contenedor
+                  const outerRadius = 48 // % del contenedor
+                  const centerX = 50
+                  const centerY = 50
+
+                  // Calcular posición para el ícono y número
+                  const iconRadius = (innerRadius + outerRadius) / 2
+                  const iconX = centerX + iconRadius * Math.cos(angle)
+                  const iconY = centerY + iconRadius * Math.sin(angle)
+
+                  // Calcular puntos para el segmento triangular
+                  const startAngle = angle - angleStep / 2
+                  const endAngle = angle + angleStep / 2
+
+                  // Puntos para el path SVG
+                  const innerStartX = centerX + innerRadius * Math.cos(startAngle)
+                  const innerStartY = centerY + innerRadius * Math.sin(startAngle)
+                  const outerStartX = centerX + outerRadius * Math.cos(startAngle)
+                  const outerStartY = centerY + outerRadius * Math.sin(startAngle)
+                  const innerEndX = centerX + innerRadius * Math.cos(endAngle)
+                  const innerEndY = centerY + innerRadius * Math.sin(endAngle)
+                  const outerEndX = centerX + outerRadius * Math.cos(endAngle)
+                  const outerEndY = centerY + outerRadius * Math.sin(endAngle)
+
+                  // Crear path para el segmento
+                  const pathData = `
+                    M ${innerStartX} ${innerStartY}
+                    L ${outerStartX} ${outerStartY}
+                    A ${outerRadius} ${outerRadius} 0 0 1 ${outerEndX} ${outerEndY}
+                    L ${innerEndX} ${innerEndY}
+                    A ${innerRadius} ${innerRadius} 0 0 0 ${innerStartX} ${innerStartY}
+                    Z
+                  `
+
+                  return (
+                    <div key={solution.id} className="absolute inset-0">
+                      <svg width="100%" height="100%" viewBox="0 0 100 100" className="absolute inset-0">
+                        <motion.path
+                          d={pathData}
+                          fill={solution.color}
+                          stroke="#fff"
+                          strokeWidth="0.5"
+                          className="cursor-pointer"
+                          whileHover={{ scale: 1.05, transformOrigin: `${centerX}% ${centerY}%` }}
+                          onMouseEnter={() => setActiveSegment(solution.id)}
+                          onMouseLeave={() => setActiveSegment(null)}
+                          role="button"
+                          aria-label={`Solución ${solution.id}: ${solution.title}`}
+                        />
+                      </svg>
+
+                      {/* Ícono y número */}
+                      <div
+                        className="absolute flex items-center justify-center text-white z-10 cursor-pointer"
+                        style={{
+                          left: `${iconX}%`,
+                          top: `${iconY}%`,
+                          transform: "translate(-50%, -50%)",
+                        }}
+                        onMouseEnter={() => setActiveSegment(solution.id)}
+                        onMouseLeave={() => setActiveSegment(null)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Solución ${solution.id}: ${solution.title}`}
+                      >
+                        <div className="flex flex-col items-center">
+                          <div className="mb-1">{solution.icon}</div>
+                          <div className="text-xs font-bold">{solution.id}</div>
+                        </div>
+                      </div>
+
+                      {/* Tooltip que aparece al hacer hover */}
+                      {activeSegment === solution.id && (
+                        <div
+                          className="absolute bg-white p-3 rounded-md shadow-lg z-40 text-center w-48"
+                          style={{
+                            left: `${iconX}%`,
+                            top: `${iconY}%`,
+                            transform: "translate(-50%, -130%)",
+                          }}
+                        >
+                          <div
+                            className="w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-1"
+                            style={{ backgroundColor: solution.color }}
+                          >
+                            <span className="text-white text-xs font-bold">{solution.id}</span>
+                          </div>
+                          <h4 className="font-bold text-gray-900 text-sm">{solution.title}</h4>
+                          <p className="text-gray-600 text-xs mt-1">{solution.description}</p>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* Leyenda de soluciones */}
+              <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                {solutions.map((solution) => (
+                  <div key={solution.id} className="flex items-center gap-3">
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: solution.color }}
+                    >
+                      <span className="text-white text-xs font-bold">{solution.id}</span>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 text-sm">{solution.title}</h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* How It Works Section */}
-        <section className="py-12 sm:py-16 md:py-24 bg-white" ref={howItWorksRef}>
+        <section className="py-12 sm:py-16 md:py-24 bg-gray-50" ref={howItWorksRef}>
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-10 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-blue-900">How It Works</h2>
@@ -351,7 +586,7 @@ export default function LandingPage() {
                     </div>
                     <h3 className="mb-3 text-xl font-bold text-gray-900">Automatización del manejo de documentos</h3>
                     <p className="text-gray-600">
-                      Convierte instantáneamente documentos en datos estructurados mediante tecnología de IA avanzada.
+                      Convierte instantáneamente documentoss en datos estructurados mediante tecnología de IA avanzada.
                     </p>
                   </div>
                 </div>
@@ -395,7 +630,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-12 sm:py-16 md:py-24 bg-gray-50">
+        <section className="py-12 sm:py-16 md:py-24 bg-white">
           <div className="container mx-auto px-4 md:px-6">
             <div className="mx-auto mb-8 sm:mb-12 max-w-[800px] text-center">
               <h2
